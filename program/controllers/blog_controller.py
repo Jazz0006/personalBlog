@@ -1,6 +1,8 @@
-from flask import Blueprint
+from flask import Blueprint, jsonify, request
 from main import db
 from models.blogs import Blog
+from schemas.blog_schema import blog_schema, blogs_schema
+import json
 
 blogs = Blueprint('blogs', __name__)
 
@@ -8,12 +10,20 @@ blogs = Blueprint('blogs', __name__)
 def hello_world():
     return 'Hello, World!'
 
-@blogs.route('/blogs', methods=['GET'])
+@blogs.route('/blogs/', methods=['GET'])
 def get_blogs():
     blogs = Blog.query.all()
-    return f'Here is the blogs pointer {blogs}'
+    return jsonify(blogs_schema.dump(blogs))
+
+@blogs.route('/blogs/', methods=['POST'])
+def create_blog():
+    #print(request.get_data())
+    new_blog = blog_schema.load(request.get_json())
+    db.session.add(new_blog)
+    db.session.commit()
+    return jsonify(blog_schema.dump(new_blog))
 
 @blogs.route('/blog/<int:id>/', methods = ['GET'])
 def get_blog(id):
     blog = Blog.query.get_or_404(id)
-    return f"Here will be the template of the blog {id}: {blog}"
+    return jsonify(blog_schema.dump(blog))

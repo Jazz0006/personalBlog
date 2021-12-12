@@ -1,7 +1,7 @@
 import os
 
 class Config(object):
-    SQLALCHEMY_TRACK_MODIFICATION = False
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     @property
     def SQLALCHEMY_DATABASE_URI(self):
@@ -14,7 +14,7 @@ class Config(object):
         uri_dict = {item: os.environ.get(item) for item in URI_VARS}
         if not all(uri_dict.values()):
             raise ValueError("Database configuration error. At least one key is missing.")
-        return f"postgresql+psycopg2://{DB_USER}:{DB_PASS}@{DB_DOMAIN}/{DB_NAME}"
+        return f"postgresql+psycopg2://{uri_dict['DB_USER']}:{uri_dict['DB_PASS']}@{uri_dict['DB_DOMAIN']}/{uri_dict['DB_NAME']}"
 
 class DevelopmentConfig(Config):
     DEBUG = True
