@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request
 from main import db
 from models.blogs import Blog
 from schemas.blog_schema import blog_schema, blogs_schema
-import json
+
 
 blogs = Blueprint('blogs', __name__)
 
