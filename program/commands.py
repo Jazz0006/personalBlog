@@ -1,7 +1,7 @@
 from main import db
 from flask import Blueprint
 
-db_commands = Blueprint("db", __name__)
+db_commands = Blueprint("db-custom", __name__)
 
 @db_commands.cli.command("create")
 def create_db():
@@ -11,6 +11,7 @@ def create_db():
 @db_commands.cli.command("drop")
 def drop_db():
     db.drop_all()
+    db.engine.execute("DROP TABLE IF EXISTS alembic_cersion;")
     print("Tables deleted")
     
 @db_commands.cli.command("seed")
