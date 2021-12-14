@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+    <hr/>
+    <div>
+        <h2>New Blog</h2>
+        <div>
+            <form action="/blogs/", method="POST">
+                <input type="text" name="blog_title" placeholder="Blog Title..."><br/>
+                <input type="text" name="blog_content" placeholder="Write your blog here..."><br/>
+                <button>Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <hr/>
+    <h2>Blog Index</h2>
+    {% for blog in page_data.blogs %}
+        <a href="/blog/{{ blog.blog_id }}/">{{ blog.blog_title }}</a><br/>
+    {% endfor %}
+{% endblock %}

@@ -1,7 +1,8 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, render_template
 from main import db
 from models.blogs import Blog
 from schemas.blog_schema import blog_schema, blogs_schema
+from datetime import datetime
 
 
 blogs = Blueprint('blogs', __name__)
@@ -12,13 +13,22 @@ def hello_world():
 
 @blogs.route('/blogs/', methods=['GET'])
 def get_blogs():
-    blogs = Blog.query.all()
-    return jsonify(blogs_schema.dump(blogs))
+    data = {
+        "page_title" : "My Blogs",
+        "blogs" : blogs_schema.dump(Blog.query.all())
+    }
+    return render_template("blog_index.html", page_data = data)
 
 @blogs.route('/blogs/', methods=['POST'])
 def create_blog():
-    #print(request.get_data())
-    new_blog = blog_schema.load(request.get_json())
+    # Get the form from the front end, and add the current time as blog_created
+    web_form = dict(request.form)
+    print(type(web_form))
+    
+    web_form["blog_created"] = datetime.today().strftime("%Y-%m-%d")
+    print(web_form)
+
+    new_blog = blog_schema.load(web_form)
     db.session.add(new_blog)
     db.session.commit()
     return jsonify(blog_schema.dump(new_blog))
