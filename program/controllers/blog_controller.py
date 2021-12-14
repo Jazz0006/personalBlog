@@ -22,12 +22,10 @@ def get_blogs():
 @blogs.route('/blogs/', methods=['POST'])
 def create_blog():
     # Get the form from the front end, and add the current time as blog_created
-    web_form = dict(request.form)
-    print(type(web_form))
-    
+    web_form = dict(request.form)    
     web_form["blog_created"] = datetime.today().strftime("%Y-%m-%d")
-    print(web_form)
 
+    # Create the new blog
     new_blog = blog_schema.load(web_form)
     db.session.add(new_blog)
     db.session.commit()
@@ -35,5 +33,9 @@ def create_blog():
 
 @blogs.route('/blog/<int:id>/', methods = ['GET'])
 def get_blog(id):
-    blog = Blog.query.get_or_404(id)
-    return jsonify(blog_schema.dump(blog))
+    blog = blog_schema.dump(Blog.query.get_or_404(id))
+    data = {
+        "page_title" : blog["blog_title"],
+        "blog" : blog
+    }
+    return render_template("blog_detail.html", page_data=data)

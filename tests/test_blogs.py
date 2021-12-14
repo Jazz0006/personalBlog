@@ -14,11 +14,10 @@ class TestBlogs(unittest.TestCase):
 
     def test_blog_index(self):
         response = self.client.get("/blogs/")
-        data = response.get_json()
-
+        data = response.data
         self.assertEqual(response.status_code, 200)
-        self.assertIsInstance(data, list)
+        self.assertIn(b'<h2>Blog Index</h2>', data)
 
     def test_creat_bad_blog(self):
-        response = self.client.post("/blogs/", json={"blog_title": ""})
+        response = self.client.post("/blogs/", data={"blog_title": ""})
         self.assertEqual(response.status_code, 400)
