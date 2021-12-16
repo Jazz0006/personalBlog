@@ -5,5 +5,12 @@
         <p>{{ page_data.blog.blog_content }}</p>
         <p>Created at:</p>
         <p>{{ page_data.blog.blog_created }}</p>
+        <p>Author:</p>
+        <p>{{ page_data.blog.author.user_name }}</p>
     </div>
+
+    <form action = "/blogs/{{ page_data.blog.blog_id }}/delete/", method="POST">
+        <button>DELETE BLOG</button>
+    </form>
+
 {% endblock %}

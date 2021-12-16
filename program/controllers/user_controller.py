@@ -1,5 +1,5 @@
 from flask import Blueprint, redirect, render_template, url_for, abort, request
-from flask_login import login_required, login_user, logout_user, current_user
+from flask_login import login_required, login_user, logout_user, current_user, login_manager
 from marshmallow.exceptions import ValidationError
 from main import db, lm
 from models.users import User

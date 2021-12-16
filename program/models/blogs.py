@@ -6,3 +6,4 @@ class Blog(db.Model):
     blog_title = db.Column(db.String(80), nullable=False)
     blog_content = db.Column(db.Text())
     blog_created = db.Column(db.Date, nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey('flasklogin-users.user_id'), nullable=False)

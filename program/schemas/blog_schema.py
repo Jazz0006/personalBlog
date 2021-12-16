@@ -9,6 +9,10 @@ class BlogSchema(ma.SQLAlchemySchema):
     blog_title = auto_field(Required = True, validate=Length(min=1))
     blog_content = auto_field()
     blog_created = auto_field()
+    author = ma.Nested(
+        "UserSchema",
+        only = ("user_id", "user_name", "email")
+        )
 
     class Meta:
         model = Blog
