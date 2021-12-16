@@ -15,9 +15,15 @@ def hello_world():
 
 @blogs.route('/blogs/', methods=['GET'])
 def get_blogs():
+    other_blogs = db.session.query(Blog).filter(Blog.blog_publicity==1)
+    my_blogs = None
+    if current_user.is_authenticated:
+        other_blogs = other_blogs.filter(Blog.author_id!=current_user.user_id)
+        my_blogs = db.session.query(Blog).filter(Blog.author_id==current_user.user_id)
     data = {
         "page_title" : "My Blogs",
-        "blogs" : blogs_schema.dump(Blog.query.all())
+        "other_blogs" : blogs_schema.dump(other_blogs),
+        "my_blogs" : blogs_schema.dump(my_blogs)
     }
     return render_template("blog_index.html", page_data = data)
 
@@ -26,6 +32,7 @@ def get_blogs():
 def create_blog():
     # Get the form from the front end, and add the current time as blog_created
     web_form = dict(request.form)
+    print(web_form)
 
     # Set the create time as the current time
     web_form["blog_created"] = datetime.today().strftime("%Y-%m-%d")
