@@ -15,10 +15,18 @@ def hello_world():
 
 @blogs.route('/blogs/', methods=['GET'])
 def get_blogs():
-    other_blogs = db.session.query(Blog).filter(Blog.blog_publicity==1)
+    # First get all public blogs
+    public_blogs = db.session.query(Blog).filter(Blog.blog_publicity==1)
+    
+    followed_private_blogs = None
     my_blogs = None
     if current_user.is_authenticated:
-        other_blogs = other_blogs.filter(Blog.author_id!=current_user.user_id)
+        # Adding private blogs from the authors that I follow. 
+        # And sort the blogs by date
+        followed_private_blogs = current_user.followed_blogs()
+        other_blogs = public_blogs.filter(
+            Blog.author_id!=current_user.user_id).union(
+                followed_private_blogs).order_by(Blog.blog_created.desc())
         my_blogs = db.session.query(Blog).filter(Blog.author_id==current_user.user_id)
     data = {
         "page_title" : "My Blogs",

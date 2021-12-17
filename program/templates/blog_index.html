@@ -1,32 +1,31 @@
 {% extends "base.html" %}
 {% block content %}
     <hr/>
-    <div>
-        <h2>New Blog</h2>
-        <div>
-            <form action="/blogs/", method="POST">
-                <input type="text" name="blog_title" placeholder="Blog Title..."><br/>
-                <input type="text" name="blog_content" placeholder="Write your blog here..."><br/>
-                <input type="radio" name="blog_publicity" value=1>
-                <label for="blog_public">Public</label><br>
-                <input type="radio" name="blog_publicity" value=2>
-                <label for="blog_private">Private</label><br>
-                <button>Submit</button>
-            </form>
-        </div>
-    </div>
-
-    <hr/>
-    <h2>Blog Index</h2>
+    <h2>Timeline: </h2>
     {% for blog in page_data.other_blogs %}
-        <p>{{ blog.author.user_name}}</p>
-        <p>Published at {{ blog.blog_created }} </p>
-        <a href="/blogs/{{ blog.blog_id }}/"> : {{ blog.blog_title }}</a><br/>
+        <p>{{ blog.author.user_name}} published at : {{ blog.blog_created }} </p>
+        <a href="/blogs/{{ blog.blog_id }}/">{{ blog.blog_title }}</a><br><br><br>
     {% endfor %}
 
     <!-- My Blogs if login-->
     {% if current_user.is_authenticated %}
-        <h2>Timeline: </h2>
+        <hr/>
+        <div>
+            <h2>New Blog</h2>
+            <div>
+                <form action="/blogs/", method="POST">
+                    <input type="text" name="blog_title" placeholder="Blog Title..."><br/>
+                    <input type="text" name="blog_content" placeholder="Write your blog here..."><br/>
+                    <input type="radio" name="blog_publicity" value=1>
+                    <label for="blog_public">Public</label><br>
+                    <input type="radio" name="blog_publicity" value=2>
+                    <label for="blog_private">Private</label><br>
+                    <button>Submit</button>
+                </form>
+            </div>
+        </div>
+        <hr>
+        <h2>My Blogs: </h2>
         {% for blog in page_data.my_blogs %}
             <a href="/blogs/{{ blog.blog_id }}/">{{ blog.blog_title }}</a><br/>
         {% endfor %}

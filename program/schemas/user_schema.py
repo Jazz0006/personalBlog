@@ -18,7 +18,7 @@ class UserSchema(ma.SQLAlchemySchema):
     def load_password(self, password):
         if len(password)>6:
             return generate_password_hash(password, method='sha256')
-        raise exceptions.ValidationError("Passwoed must be at least 6 harachers.")
+        raise exceptions.ValidationError("Password must be at least 6 harachers.")
 
     class Meta:
         model = User

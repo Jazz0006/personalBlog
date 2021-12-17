@@ -16,8 +16,19 @@ class TestBlogs(unittest.TestCase):
         response = self.client.get("/blogs/")
         data = response.data
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'<h2>Blog Index</h2>', data)
+        self.assertIn(b'<h2>Timeline', data)
 
     def test_creat_bad_blog(self):
+        ''' Test case for creating a blog with empty title'''
+        # First register a user and login
+        response = self.client.post("/users/signup/", data=dict(
+            user_name = "test user",
+            email = "test@fakemail.com",
+            password = "1234567"),
+            follow_redirects=True,
+            headers = {"Content-Type":"application/x-www-form-urlencoded"}
+        )
+
+        self.assertEqual(response.status_code, 200)
         response = self.client.post("/blogs/", data={"blog_title": ""})
         self.assertEqual(response.status_code, 400)

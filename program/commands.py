@@ -15,6 +15,8 @@ def drop_db():
     db.drop_all()
     db.engine.execute("DROP TABLE IF EXISTS alembic_cersion;")
     print("Tables deleted")
+
+@db_commands.cli.command("seed4test")
     
 @db_commands.cli.command("seed")
 def seed_db():

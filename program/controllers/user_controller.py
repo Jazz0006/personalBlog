@@ -69,6 +69,12 @@ def user_detail():
     db.session.commit()
     return redirect(url_for("users.get_users"))
 
+@users.route("/users/<int:id>/", methods=["GET", "POST"])
+@login_required
+def view_user(id):
+    # Todo: add follow and unfollow button
+    return f"I am user {id}."
+
 @users.route("/users/logout/", methods=["POST"])
 @login_required
 def log_out():
