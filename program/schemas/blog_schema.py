@@ -1,4 +1,4 @@
-from marshmallow_sqlalchemy.schema import auto_field
+#from marshmallow_sqlalchemy.schema import auto_field
 from main import ma
 from models.blogs import Blog
 from marshmallow_sqlalchemy import auto_field

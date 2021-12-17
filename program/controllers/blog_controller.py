@@ -1,5 +1,4 @@
-from flask import Blueprint, jsonify, request, render_template, url_for
-from werkzeug.utils import redirect
+from flask import Blueprint, jsonify, request, render_template, url_for, redirect
 from main import db
 from models.blogs import Blog
 from schemas.blog_schema import blog_schema, blogs_schema
@@ -40,7 +39,7 @@ def get_blogs():
 def create_blog():
     # Get the form from the front end, and add the current time as blog_created
     web_form = dict(request.form)
-    print(web_form)
+    #print(web_form)
 
     # Set the create time as the current time
     web_form["blog_created"] = datetime.today().strftime("%Y-%m-%d")

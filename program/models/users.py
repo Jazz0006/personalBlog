@@ -3,6 +3,8 @@ from main import db
 from flask_login import UserMixin
 from werkzeug.security import check_password_hash
 from models.blogs import Blog
+from models.items import Bought_Item
+from models.cars import Car
 
 followers = db.Table(
     'followers',
@@ -44,6 +46,16 @@ class User(UserMixin, db.Model):
         secondaryjoin=(followers.c.followed_id == user_id),
         backref=db.backref('followers', lazy='dynamic'), 
         lazy='dynamic'
+    )
+
+    bought_items = db.relationship(
+        'Bought_Item',
+        backref="owner"
+    )
+
+    car = db.relationship(
+        'Car',
+        backref="owner"
     )
 
     # def __init__(self, name, email):
