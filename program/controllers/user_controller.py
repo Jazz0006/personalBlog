@@ -5,15 +5,19 @@ from main import db, lm
 from models.users import User
 from schemas.user_schema import users_schema, user_schema, user_update_schema
 
+
 @lm.user_loader
 def load_user(user):
     return User.query.get(user)
+
 
 @lm.unauthorized_handler
 def unauthorized():
     return redirect('/users/login/')
 
+
 users = Blueprint('users', __name__)
+
 
 @users.route("/users/", methods=["GET"])
 def get_users():
@@ -21,14 +25,15 @@ def get_users():
         "page_title": "user Index",
         "users": users_schema.dump(User.query.all())
     }
-    return render_template("user_index.html", page_data = data)
+    return render_template("user_index.html", page_data=data)
 
-@users.route("/users/signup/", methods = ["GET", "POST"])
+
+@users.route("/users/signup/", methods=["GET", "POST"])
 def sign_up():
     data = {"page_title": "Sign Up"}
 
     if request.method == "GET":
-        return render_template("signup.html", page_data = data)
+        return render_template("signup.html", page_data=data)
 
     new_user = user_schema.load(request.form)
     db.session.add(new_user)
@@ -37,12 +42,13 @@ def sign_up():
     login_user(new_user)
     return redirect(url_for("users.get_users"))
 
-@users.route("/users/login/", methods = ["GET", "POST"])
+
+@users.route("/users/login/", methods=["GET", "POST"])
 def log_in():
     data = {"page_title": "Log In"}
 
     if request.method == "GET":
-        return render_template("login.html", page_data = data)
+        return render_template("login.html", page_data=data)
 
     user = User.query.filter_by(email=request.form["email"]).first()
     if user and user.check_password(password=request.form["password"]):
@@ -51,12 +57,13 @@ def log_in():
 
     abort(401, "Login unsuccessful. Please check the user email and password")
 
+
 @users.route("/users/account/", methods=["GET", "POST"])
 @login_required
 def user_detail():
     if request.method == "GET":
         data = {"page_title": "Account Details"}
-        return render_template("user_detail.html", page_data = data)
+        return render_template("user_detail.html", page_data=data)
 
     user = User.query.filter_by(user_id=current_user.user_id)
     updated_fields = user_schema.dump(request.form)
@@ -69,11 +76,13 @@ def user_detail():
     db.session.commit()
     return redirect(url_for("users.get_users"))
 
+
 @users.route("/users/<int:id>/", methods=["GET", "POST"])
 @login_required
 def view_user(id):
     # Todo: add follow and unfollow button
     return f"I am user {id}."
+
 
 @users.route("/users/logout/", methods=["POST"])
 @login_required

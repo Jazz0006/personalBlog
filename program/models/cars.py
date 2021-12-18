@@ -1,5 +1,6 @@
 from main import db
 
+
 class Car(db.Model):
     __tablename__ = "cars"
     car_id = db.Column(db.Integer, primary_key=True)
@@ -12,7 +13,7 @@ class Car(db.Model):
 
     # One on one relationship with the User
     owner_id = db.Column(
-        db.Integer, 
-        db.ForeignKey('flasklogin-users.user_id'), 
+        db.Integer,
+        db.ForeignKey('flasklogin-users.user_id'),
         nullable=False,
         unique=True)
