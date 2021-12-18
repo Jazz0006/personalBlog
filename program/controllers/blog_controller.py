@@ -23,13 +23,15 @@ def get_blogs():
         # Adding private blogs from the authors that I follow. 
         # And sort the blogs by date
         followed_private_blogs = current_user.followed_blogs()
-        other_blogs = public_blogs.filter(
+        public_blogs = public_blogs.filter(
             Blog.author_id!=current_user.user_id).union(
                 followed_private_blogs).order_by(Blog.blog_created.desc())
-        my_blogs = db.session.query(Blog).filter(Blog.author_id==current_user.user_id)
+        my_blogs = current_user.blogs
+    else:
+        public_blogs = public_blogs.order_by(Blog.blog_created.desc())
     data = {
         "page_title" : "My Blogs",
-        "other_blogs" : blogs_schema.dump(other_blogs),
+        "other_blogs" : blogs_schema.dump(public_blogs),
         "my_blogs" : blogs_schema.dump(my_blogs)
     }
     return render_template("blog_index.html", page_data = data)

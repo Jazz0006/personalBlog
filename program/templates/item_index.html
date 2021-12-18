@@ -6,6 +6,8 @@
         {% for item in page_data.list_items %}
             <p>{{ item.item_name}} : {{ item.item_price }} </p>
         {% endfor %}
+        <p>You own {{ page_data.num_item }} items</p>
+        <p>The total price is ${{ page_data.total_price }}</p>
     {% else %}
         <p> You have not register any item yet.</p>
     {% endif %}

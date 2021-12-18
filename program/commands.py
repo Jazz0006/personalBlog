@@ -40,7 +40,10 @@ def seed_db():
         blog_json = {
             "blog_title" : faker.sentence(),
             "blog_content" : faker.text(),
-            "blog_created" : faker.date()
+            "blog_created" : faker.date(),
+            
+            # Half of the fake blogs are public, and half are private
+            "blog_publicity" : i%2+1
         }
         blog = blog_schema.load(blog_json)
         

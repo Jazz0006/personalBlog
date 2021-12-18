@@ -2,7 +2,6 @@ from marshmallow.fields import Nested
 from marshmallow_sqlalchemy import auto_field
 from main import ma
 from models.items import Bought_Item
-from marshmallow.validate import OneOf
 
 class ItemSchema(ma.SQLAlchemySchema):
     item_id = auto_field(dump_only=True)
@@ -10,6 +9,8 @@ class ItemSchema(ma.SQLAlchemySchema):
     item_description = auto_field()
     bought_at = auto_field()
     warrenty_expire = auto_field()
+    # Todo: add validation, warrenty should be later than bought date
+    
     item_price = auto_field()
     owner = ma.Nested(
         "UserSchema",
