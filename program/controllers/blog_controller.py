@@ -30,7 +30,7 @@ def get_blogs():
     else:
         public_blogs = public_blogs.order_by(Blog.blog_created.desc())
     data = {
-        "page_title" : "My Blogs",
+        "page_title" : "View Blogs",
         "other_blogs" : blogs_schema.dump(public_blogs),
         "my_blogs" : blogs_schema.dump(my_blogs)
     }

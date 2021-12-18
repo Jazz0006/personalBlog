@@ -9,6 +9,7 @@ class UserSchema(ma.SQLAlchemySchema):
     user_id = auto_field(dump_only=True)
     user_name = auto_field(required=True, validate=validate.Length(min=1))
     email = auto_field(required=True, validate=validate.Email())
+    car = auto_field()
     password = fields.Method(
         required = True,
         load_only = True,

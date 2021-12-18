@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+    <hr/>
+    <div>
+        {% if page_data.my_car %}
+            <h3>Service Reminder</h3>
+            <p>Your car was bought on: {{ page_data.my_car.bought_at }}</p>
+            <p>The next service date is: {{ page_data.my_car.next_service }}</p>
+            <form action = "/car/delete/", method="POST">
+                <button>DELETE THIS CAR</button>
+            </form>
+        {% else %}
+            <p>You have not recorded your car.</p>
+            <form action="/car/" method="POST">
+                <label for="bought_at">Pachasing Date:</label>
+                <input type="date" name="bought_at">
+                <br>
+                <label for="next_service">Next Service Date:</label>
+                <input type="date" name="next_service">
+                <button>Submit</button>
+            </form>
+        {% endif %}
+    </div>
+
+    
+
+{% endblock %}
