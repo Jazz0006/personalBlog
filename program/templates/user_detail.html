@@ -1,30 +1,58 @@
 {% extends "base.html" %}
 {% block content %}
-    <div>       
-        <form action="/users/account/" method="POST">
-            <label for="name">Name:</label>
-            <input type="text" name="name" value = {{ current_user.user_name }}>
-            <label for="email">Email:</label>
-            <input type="text" name="email" value = {{ current_user.email }}>
-            <button>Update</button>
-        </form>        
-    </div>
-    <hr>
-    <h3>Register My Item:</h3>
-    <div>
-        <form action="/items/" method="POST">
-            <input type="text" name="item_name", placeholder="Item Name...">
-            <input type="text" name="item_description", placeholder="Description...">
-            <br>
-            <label for="item_price">Price: </label>
-            <input type="number" step=0.01 name="item_price">
-            <br>
-            <label for="bought_at">Purchasing Date</label>
-            <input type="date" name="bought_at">
-            <label for="warrenty_expire">Warrenty Expire Date</label>
-            <input type="date" name="warrenty_expire">
-            <br>
-            <button>Add Item</button>
-        </form>
-    </div>
+
+    <p>You have {{ current_user.blogs|length }} blogs.</p>
+    <p>You are following {{ current_user.followed.count() }} users.</p>
+    <p>You have {{ current_user.followers.count() }} followers.</p>
+    {% if page_data.user == current_user %}
+    <!-- view of my own profile -->
+        <div>       
+            <form action="/users/{{ current_user.user_id }}/" method="POST">
+                <label for="name">Name:</label>
+                <input type="text" name="name" value = {{ current_user.user_name }}>
+                <label for="email">Email:</label>
+                <input type="text" name="email" value = {{ current_user.email }}>
+                <button>Update</button>
+            </form>        
+        </div>
+        <hr>
+        <h3>Register My Item:</h3>
+        <div>
+            <form action="/items/" method="POST">
+                <input type="text" name="item_name", placeholder="Item Name...">
+                <input type="text" name="item_description", placeholder="Description...">
+                <br>
+                <label for="item_price">Price: </label>
+                <input type="number" step=0.01 name="item_price">
+                <br>
+                <label for="bought_at">Purchasing Date</label>
+                <input type="date" name="bought_at">
+                <label for="warrenty_expire">Warrenty Expire Date</label>
+                <input type="date" name="warrenty_expire">
+                <br>
+                <button>Add Item</button>
+            </form>
+        </div>
+
+    {% else %}
+        <!-- Other user's profile -->
+        <div>            
+            <h3>Information about {{ page_data.user.user_name }}</h3>
+            <p> {{ page_data.user.blogs|length }} articles</p>
+            <p> following : {{ page_data.user.followed.count() }}</p>
+            <p> followers : {{ page_data.user.followers.count() }}</p>
+            
+        </div>
+        {% if current_user.is_following(page_data.user) %}
+            <p>You are following {{ page_data.user.user_name }}</p>
+            <form action="/users/unfollow/{{ page_data.user.user_id }}/", method="POST">
+                <button>UNFOLLOW</button>
+            </form>
+        {% else %}
+            <form action="/users/follow/{{ page_data.user.user_id }}/", method="POST">
+                <button>FOLLOW</button>
+            </form>
+        {% endif %}
+    {% endif %}
+    
 {% endblock %}

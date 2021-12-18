@@ -58,17 +58,21 @@ def log_in():
     abort(401, "Login unsuccessful. Please check the user email and password")
 
 
-@users.route("/users/account/", methods=["GET", "POST"])
+@users.route("/users/<int:user_id>/", methods=["GET", "POST"])
 @login_required
-def user_detail():
+def user_detail(user_id):
+    view_user = User.query.get_or_404(user_id)
     if request.method == "GET":
-        data = {"page_title": "Account Details"}
+        data = {
+            "page_title": f"Hi, { current_user.user_name }",
+            "user" : view_user
+        }
         return render_template("user_detail.html", page_data=data)
 
-    user = User.query.filter_by(user_id=current_user.user_id)
+    user = User.query.get_or_404(user_id)
     updated_fields = user_schema.dump(request.form)
     errors = user_update_schema.validate(updated_fields)
-
+    
     if errors:
         raise ValidationError(message=errors)
 
@@ -76,13 +80,31 @@ def user_detail():
     db.session.commit()
     return redirect(url_for("users.get_users"))
 
-
-@users.route("/users/<int:id>/", methods=["GET", "POST"])
+@users.route("/users/follow/<int:user_id>/", methods=["POST"])
 @login_required
-def view_user(id):
-    # Todo: add follow and unfollow button
-    return f"I am user {id}."
+def follow(user_id):
+    
+    target_user = User.query.get_or_404(user_id)
+    if target_user is None:
+        return redirect(url_for('users.get_users'))
+    if not current_user.is_following(target_user):
+        current_user.follow(target_user)
+        db.session.commit()
+        
+    return redirect(url_for('users.user_detail', user_id=user_id))
 
+@users.route("/users/unfollow/<int:user_id>/", methods=["POST"])
+@login_required
+def unfollow(user_id):
+    
+    target_user = User.query.get_or_404(user_id)
+    if target_user is None:
+        return redirect(url_for('users.get_users'))
+    if current_user.is_following(target_user):
+        current_user.unfollow(target_user)
+        db.session.commit()
+        
+    return redirect(url_for('users.user_detail', user_id=user_id))
 
 @users.route("/users/logout/", methods=["POST"])
 @login_required

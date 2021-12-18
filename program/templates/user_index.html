@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
     {% for user in page_data.users %}
-        <li><a href='/users/{{ user.user_id }}/'>{{ user.user_name }}: {{ user.email }}</a></li>
+        <li><a href='/users/{{ user.user_id }}/'>{{ user.user_name }}</a></li>
     {% endfor %}
 {% endblock %}

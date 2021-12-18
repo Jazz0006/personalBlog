@@ -10,10 +10,6 @@ blogs = Blueprint('blogs', __name__)
 
 
 @blogs.route('/')
-def hello_world():
-    return 'Hello, World!'
-
-
 @blogs.route('/blogs/', methods=['GET'])
 def get_blogs():
     # First get all public blogs
