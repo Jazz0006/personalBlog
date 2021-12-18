@@ -8,9 +8,12 @@ from models.cars import Car
 
 followers = db.Table(
     'followers',
-    db.Column('follower_id', db.Integer, db.ForeignKey('flasklogin-users.user_id')),
-    db.Column('followed_id', db.Integer, db.ForeignKey('flasklogin-users.user_id')),
+    db.Column('follower_id', db.Integer,
+              db.ForeignKey('flasklogin-users.user_id')),
+    db.Column('followed_id', db.Integer,
+              db.ForeignKey('flasklogin-users.user_id')),
 )
+
 
 class User(UserMixin, db.Model):
 
@@ -18,20 +21,20 @@ class User(UserMixin, db.Model):
 
     user_id = db.Column(
         db.Integer,
-        primary_key = True
+        primary_key=True
     )
     user_name = db.Column(
         db.String(100),
-        nullable = False
+        nullable=False
     )
     email = db.Column(
         db.String(40),
-        unique = True,
-        nullable = False
+        unique=True,
+        nullable=False
     )
     password = db.Column(
         db.String(200),
-        nullable = False
+        nullable=False
     )
 
     blogs = db.relationship(
@@ -40,11 +43,11 @@ class User(UserMixin, db.Model):
     )
 
     followed = db.relationship(
-        'User', 
+        'User',
         secondary=followers,
         primaryjoin=(followers.c.follower_id == user_id),
         secondaryjoin=(followers.c.followed_id == user_id),
-        backref=db.backref('followers', lazy='dynamic'), 
+        backref=db.backref('followers', lazy='dynamic'),
         lazy='dynamic'
     )
 
@@ -61,7 +64,6 @@ class User(UserMixin, db.Model):
     # def __init__(self, name, email):
     #     self.user_name = name
     #     self.email = email
-
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
@@ -90,6 +92,4 @@ class User(UserMixin, db.Model):
             followers, (followers.c.followed_id == Blog.author_id)).filter(
                 followers.c.follower_id == self.user_id).order_by(
                     Blog.blog_created.desc()
-                )
-            
-
+        )
