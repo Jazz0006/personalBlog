@@ -22,7 +22,7 @@ class TestBlogs(unittest.TestCase):
         ''' Test case for creating a blog with empty title'''
         # First register a user and login
         response = self.client.post("/users/signup/", data=dict(
-            user_name = "test user",
+            user_name = "test2 user",
             email = "test@fakemail.com",
             password = "1234567"),
             follow_redirects=True,
@@ -32,3 +32,4 @@ class TestBlogs(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         response = self.client.post("/blogs/", data={"blog_title": ""})
         self.assertEqual(response.status_code, 400)
+        self.client.post("/users/delete/")

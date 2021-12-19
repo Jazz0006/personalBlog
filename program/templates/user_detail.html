@@ -16,23 +16,6 @@
             </form>        
         </div>
         <hr>
-        <h3>Register My Item:</h3>
-        <div>
-            <form action="/items/" method="POST">
-                <input type="text" name="item_name", placeholder="Item Name...">
-                <input type="text" name="item_description", placeholder="Description...">
-                <br>
-                <label for="item_price">Price: </label>
-                <input type="number" step=0.01 name="item_price">
-                <br>
-                <label for="bought_at">Purchasing Date</label>
-                <input type="date" name="bought_at">
-                <label for="warrenty_expire">Warrenty Expire Date</label>
-                <input type="date" name="warrenty_expire">
-                <br>
-                <button>Add Item</button>
-            </form>
-        </div>
 
     {% else %}
         <!-- Other user's profile -->

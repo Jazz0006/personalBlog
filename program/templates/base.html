@@ -6,7 +6,19 @@
         <title>
             My Personal Blog
         </title>
+        <style>
+            .grid-container {
+                display: grid;                
+                grid-template-columns: auto auto;                
+                padding: 5px;
+            }
+
+            .grid-item {
+                padding: 5px;
+            }
+        </style>
     </head>
+    
     <body>
         <header>
             <h1>{{ page_data.page_title }}</h1>

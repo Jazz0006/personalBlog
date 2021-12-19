@@ -1,9 +1,8 @@
 import unittest
 import sys, os
+from main import create_app
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'program'))
-from main import create_app, db
 from dotenv import load_dotenv
-from models.users import User
 
 load_dotenv()
 
@@ -14,19 +13,38 @@ class TestUsers(unittest.TestCase):
         self.app = create_app()
         self.client = self.app.test_client()
 
-    # The test cases to test relationship between tables
-    # Todo: Add configuration of DB
-    
-    # def test_follow(self):
-    #     app = create_app()
-    #     u1 = User(user_name="star_user", email="fake@email.com", password="1234567")
-    #     u2 = User(user_name="fan_user", email="fake2@rmail.com", password="7654321")
-    #     db.session.add(u1)
-    #     db.session.add(u2)
-    #     db.session.commit()
-    #     u1.follow(u2)
-    #     print(u1.followed)
-        
+    def test_signup(self):
+        # register a user and login
+        response = self.client.post("/users/signup/", data=dict(
+            user_name = "test register",
+            email = "test@fakemail.com",
+            password = "1234567"),
+            follow_redirects=True,
+            headers = {"Content-Type":"application/x-www-form-urlencoded"}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'User Index', response.data)
+        response = self.client.post("/users/delete/")
+        self.assertIn(b'View Blogs', response.data)
 
-if __name__ == '__main__':
-    unittest.main(verbosity=2)
+    def test_follow(self):
+        # Register the first user
+        self.client.post("/users/signup/", data=dict(
+            user_name = "star user",
+            email = "star@fakemail.com",
+            password = "1234567"),
+            follow_redirects=True,
+            headers = {"Content-Type":"application/x-www-form-urlencoded"}
+        )
+
+
+        # Register the second user
+        self.client.post("/users/signup/", data=dict(
+            user_name = "fan user",
+            email = "fan@fakemail.com",
+            password = "1234567"),
+            follow_redirects=True,
+            headers = {"Content-Type":"application/x-www-form-urlencoded"}
+        )
+
+        # Todo: gain access to db, and adding relationship

@@ -22,7 +22,7 @@ users = Blueprint('users', __name__)
 @users.route("/users/", methods=["GET"])
 def get_users():
     data = {
-        "page_title": "user Index",
+        "page_title": "User Index",
         "users": users_schema.dump(User.query.all())
     }
     return render_template("user_index.html", page_data=data)
@@ -53,7 +53,7 @@ def log_in():
     user = User.query.filter_by(email=request.form["email"]).first()
     if user and user.check_password(password=request.form["password"]):
         login_user(user)
-        return redirect(url_for('blogs.get_blogs'))
+        return redirect(url_for('users.user_detail', user_id=current_user.user_id))
 
     abort(401, "Login unsuccessful. Please check the user email and password")
 
@@ -111,3 +111,14 @@ def unfollow(user_id):
 def log_out():
     logout_user()
     return redirect(url_for("users.log_in"))
+
+@users.route("/users/delete/", methods=["POST"])
+@login_required
+def delete_user():
+    current_id = current_user.user_id
+    logout_user()
+    user = User.query.get_or_404(current_id)
+    db.session.delete(user)
+    db.session.commit()
+
+    return redirect(url_for("blogs.get_blogs"))

@@ -6,7 +6,9 @@
         <p>Created at:</p>
         <p>{{ page_data.blog.blog_created }}</p>
         <p>Author:</p>
-        <p>{{ page_data.blog.author.user_name }}</p>
+        <a href="/users/{{ page_data.blog.author.user_id }}/">
+            {{ page_data.blog.author.user_name }}
+        </a>
     </div>
 
     <form action = "/blogs/{{ page_data.blog.blog_id }}/delete/", method="POST">

@@ -1,6 +1,18 @@
 {% extends "base.html" %}
 {% block content %}
+    <hr>
+    <h2>List of Users</h2>
+    <p>Please be noted below "Login as XXX" buttons are for test purpose only.</p>
+    <P>Click on the button will let you login directly as that user.</P>
+    <p>These buttons will be removed in production.</p>
     {% for user in page_data.users %}
-        <li><a href='/users/{{ user.user_id }}/'>{{ user.user_name }}</a></li>
+        <div class="grid-container">
+            <a class="grid-item" href='/users/{{ user.user_id }}/'>{{ user.user_name }}</a>
+            <form class="grid-item" action="/users/login/" method="POST">
+                <input type="hidden" name="email" value={{ user.email }}>
+                <input type="hidden" name="password" value="1234567">
+                <button>Login as {{ user.user_name }}</button>
+            </form>
+        </div>
     {% endfor %}
 {% endblock %}
