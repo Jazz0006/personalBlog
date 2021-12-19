@@ -6,13 +6,15 @@
     <P>Click on the button will let you login directly as that user.</P>
     <p>These buttons will be removed in production.</p>
     {% for user in page_data.users %}
-        <div class="grid-container">
-            <a class="grid-item" href='/users/{{ user.user_id }}/'>{{ user.user_name }}</a>
-            <form class="grid-item" action="/users/login/" method="POST">
-                <input type="hidden" name="email" value={{ user.email }}>
-                <input type="hidden" name="password" value="1234567">
-                <button>Login as {{ user.user_name }}</button>
-            </form>
+        <div style="width: 500px;">
+            <div class="grid-container">
+                <a class="grid-item" href='/users/{{ user.user_id }}/'>{{ user.user_name }}</a>
+                <form class="grid-item" action="/users/login/" method="POST">
+                    <input type="hidden" name="email" value={{ user.email }}>
+                    <input type="hidden" name="password" value="1234567">
+                    <button>Login as {{ user.user_name }}</button>
+                </form>
+            </div>
         </div>
     {% endfor %}
 {% endblock %}

@@ -4,7 +4,14 @@
     <h2>My Items: </h2>
     {% if page_data.list_items %}
         {% for item in page_data.list_items %}
-            <p>{{ item.item_name}} : {{ item.item_price }} </p>
+            <div style="width: 500px;">
+                <div class="grid-container">
+                    <p class="grid-item">{{ item.item_name}} : {{ item.item_price }} </p>
+                    <form class="grid-item" action="/items/delete/{{ item.item_id }}/" method="POST">
+                        <button>DELETE THIS ITEM</button>
+                    </form>
+                </div>
+            </div>
         {% endfor %}
         <p>You own {{ page_data.num_item }} items</p>
         <p>The total price is ${{ page_data.total_price }}</p>

@@ -37,3 +37,9 @@ def get_items():
     }
     return render_template("item_index.html", page_data=data)
     
+@bought_items.route('/item/delete/<int:id>/')
+@login_required
+def delete_item(id):
+    item = Bought_Item.query.get_or_404(id)
+    db.session.delete(item)
+    db.session.commit()
