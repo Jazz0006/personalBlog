@@ -43,7 +43,7 @@ def create_blog():
     # print(web_form)
 
     # Set the create time as the current time
-    web_form["blog_created"] = datetime.today().strftime("%Y-%m-%d")
+    #web_form["blog_created"] = datetime.today().strftime("%Y-%m-%d")
 
     # Create the new blog
     new_blog = blog_schema.load(web_form)

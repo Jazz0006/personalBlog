@@ -3,11 +3,37 @@
     <div>
         <h2>Enter Details</h2>
         <div>
+            <form action="" method="post" novalidate>
+                {{ page_data.form.hidden_tag()}}
+                <p>
+                    {{ page_data.form.username.label }}<br>
+                    {{ page_data.form.username(size=32) }}<br>
+                    {% for error in page_data.form.username.errors %}
+                    <span style='color: red;'>[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ page_data.form.password.label }}<br>
+                    {{ page_data.form.password(size=32) }}<br>
+                    {% for error in page_data.form.password.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ page_data.form.remember_me() }} {{ page_data.form.remember_me.label }}
+                </p>
+                <p>
+                    {{ page_data.form.submit() }}
+                </p>
+            </form>
+
+            <!--
             <form action="/users/login/" method="POST">
                 <input type="text" name="email" placeholder="Email...">
                 <input type="text" name="password" placeholder="Password...">
                 <button>Login</button>
             </form>
+            -->
         </div>
     </div>
 {% endblock %}

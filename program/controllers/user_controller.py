@@ -1,9 +1,10 @@
-from flask import Blueprint, redirect, render_template, url_for, abort, request
+from flask import Blueprint, redirect, render_template, url_for, abort, request, flash
 from flask_login import login_required, login_user, logout_user, current_user, login_manager
 from marshmallow.exceptions import ValidationError
 from main import db, lm
 from models.users import User
 from schemas.user_schema import users_schema, user_schema, user_update_schema
+from forms import LoginForm
 
 
 @lm.user_loader
@@ -45,17 +46,31 @@ def sign_up():
 
 @users.route("/users/login/", methods=["GET", "POST"])
 def log_in():
-    data = {"page_title": "Log In"}
+    if current_user.is_authenticated:
+        return redirect(url_for('blogs.get_blogs'))
+    form = LoginForm()
 
-    if request.method == "GET":
-        return render_template("login.html", page_data=data)
+    data = {
+        "page_title": "Log In",
+        "form" : form
+    }
 
-    user = User.query.filter_by(email=request.form["email"]).first()
-    if user and user.check_password(password=request.form["password"]):
-        login_user(user)
-        return redirect(url_for('users.user_detail', user_id=current_user.user_id))
+    if form.validate_on_submit():
+        user = User.query.filter_by(user_name=form.username.data).first()
+        if user is None or not user.check_password(form.password.data):
+            flash('Invalid username or password')
+            return redirect(url_for('users.log_in'))
+        login_user(user, remember=form.remember_me.data)
+        #flash(f'Login requested for user {form.username.data}, \
+        #remember_me={form.remember_me.data}' )
+        return redirect(url_for('blogs.get_blogs'))
 
-    abort(401, "Login unsuccessful. Please check the user email and password")
+    data = {
+        "page_title": "Log In",
+        "form" : form
+    }
+    #if request.method == "GET":
+    return render_template("login.html", page_data=data)
 
 
 @users.route("/users/<int:user_id>/", methods=["GET", "POST"])

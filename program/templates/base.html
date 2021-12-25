@@ -24,9 +24,9 @@
         <header>
             <h1>{{ page_data.page_title }}</h1>
             <nav>
-                <a href="/">Home</a>
-                <a href="/blogs/">Blog Index</a>
-                <a href="/users/">User Index</a>
+                <a href="{{ url_for('blogs.get_blogs') }}">Home</a>
+                <a href="{{ url_for('blogs.get_blogs') }}">Blog Index</a>
+                <a href="{{ url_for('users.get_users') }}">User Index</a>
                 {% if current_user.is_authenticated %}
                     <a href="/users/{{ current_user.user_id }}/">Account</a>
                     <form action="/users/logout/" method="POST">
@@ -41,6 +41,17 @@
                 {% endif %}
             </nav>
         </header>
+        <div>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            {% endwith %}
+        </div>
         <div>
             {% block content%}
 

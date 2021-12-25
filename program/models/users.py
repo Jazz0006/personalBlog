@@ -65,6 +65,9 @@ class User(UserMixin, db.Model):
     #     self.user_name = name
     #     self.email = email
 
+    def __repr__(self):
+        return f'<User {self.user_name}'
+
     def check_password(self, password):
         return check_password_hash(self.password, password)
 

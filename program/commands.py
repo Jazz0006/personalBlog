@@ -1,10 +1,11 @@
-from sqlalchemy.sql.expression import table
+# from sqlalchemy.sql.expression import table
 from main import db
 from flask import Blueprint
 from sqlalchemy import create_engine
 from sqlalchemy.schema import MetaData
 import json
 from datetime import date
+
 
 db_commands = Blueprint("db-custom", __name__)
 
